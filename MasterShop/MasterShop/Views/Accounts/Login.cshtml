@@ -1,0 +1,37 @@
+﻿@* Dean - from IEnumerable<Account> to Account. *@
+@*@model IEnumerable<MasterShop.Models.Account>*@
+@model MasterShop.Models.Account
+
+@{ ViewData["Title"] = "Sign In";
+    Layout = "_UsersLayout"; }
+
+@{ var data = ViewData["Message"]; }
+
+<div class="inner">
+    <div class="image-holder">
+        <img src="~/images/Login/registration-form-1.jpg" alt="">
+    </div>
+    <form asp-action="Login">
+        <h3>Sign In</h3>
+        <div class="form-wrapper">
+            <input asp-for="Email" type="text" placeholder="Email" name="Email" class="form-control">
+            <i class="zmdi zmdi-account"></i>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-wrapper">
+            <input asp-for="Password" type="password" placeholder="Password" name="Password" class="form-control">
+            <i class="zmdi zmdi-lock"></i>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <button type="submit">
+            Login
+            <i class="zmdi zmdi-arrow-right"></i>
+        </button>
+        <div class="signup">
+            <span class="txt1">
+                Don’t have an account?
+            </span>
+            <a asp-action="Register"><b>Sign Up!</b></a>
+        </div>
+    </form>
+</div>
