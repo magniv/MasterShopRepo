@@ -1,0 +1,68 @@
+﻿@model MasterShop.Models.Account
+<body id="page-top">
+    <section>
+
+        <div class="class=" container"">
+            <div style="text-align:center">
+
+                <table style="width:55%" align="center">
+
+                    <tr>
+                        <td>
+                            <h4>My Account</h4>
+                            <hr />
+                            <br />
+                        </td>
+
+                        <td></td>
+                    </tr>
+
+                    <tr class="table-active">
+
+                        <th>User Name</th>
+                        <th><label asp-for="Email" class="control-label"></label></th>
+                        <th><label asp-for="Password" class="control-label"></label></th>
+                    </tr>
+
+                    <form asp-action="Profile">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="FullName" />
+                        <input type="hidden" asp-for="Type" />
+                        <tr>
+                            @{ var userId = Context.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value; }
+
+                            <td>@userId</td>
+                            <td>
+                                <div class="form-group">
+                                    <br />
+                                    <input asp-for="Email" class="col-xs-2" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <br />
+                                    <input asp-for="Password" class="col-xs-2" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <br />
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <input type="submit" value="Save" class="btn btn-warning" />
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </form>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>

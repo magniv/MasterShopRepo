@@ -1,0 +1,59 @@
+﻿@model MasterShop.Models.Account
+
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = "_UsersLayout";
+
+}
+
+<div class="inner">
+    <div class="image-holder">
+        <img src="~/images/Login/registration-form-1.jpg" alt="">
+    </div>
+    <form asp-action="Register" class="signupform" onsubmit="return passConfirm(this)">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <h3>Sign Up</h3>
+        <div class="form-group">
+            <input name="fname" type="text" placeholder="First Name" class="form-control">
+            <input name="lname" type="text" placeholder="Last Name" class="form-control">
+            <span asp-validation-for="FullName" class="text-danger"></span>
+
+        </div>
+        <div class="form-wrapper">
+            <input asp-for="Email" type="text" placeholder="Email Address" class="form-control">
+            <i class="zmdi zmdi-email"></i>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-wrapper">
+            <select asp-for="Gender" id="" class="form-control">
+                <option value="" disabled selected>Gender</option>
+                <option value="male">Male</option>
+                <option value="femal">Female</option>
+                <option value="other">Other</option>
+            </select>
+            <i class="zmdi zmdi-caret-down" style="font-size: 17px"></i>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+        <div class="form-wrapper">
+            <input asp-for="Password" name="Password" type="password" placeholder="Password" class="form-control">
+            <i class="zmdi zmdi-lock"></i>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-wrapper">
+            <input asp-for="ConfirmPassword" name="ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control">
+            <i class="zmdi zmdi-lock"></i>
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+        <button type="submit">
+            Register
+            <i class="zmdi zmdi-arrow-right"></i>
+        </button>
+        <div class="signin">
+            <span class="txt1">
+                Already have an account?
+            </span>
+            <a asp-action="Login"><b>Sign In!</b></a>
+        </div>
+    </form>
+</div>
+
