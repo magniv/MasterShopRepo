@@ -29,5 +29,8 @@ namespace MasterShop.Models
 
         [Display(Name = "Image Url")]
         public string ImageUrl { get; set; }
+
+        public ICollection<ProductOrder> ProductOrders { get; set; }
+
     }
 }
