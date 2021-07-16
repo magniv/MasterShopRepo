@@ -19,5 +19,7 @@ namespace MasterShop.Data
         public DbSet<MasterShop.Models.Product> Product { get; set; }
 
         public DbSet<MasterShop.Models.Account> Account { get; set; }
+
+        public DbSet<MasterShop.Models.Order> Order { get; set; }
     }
 }
