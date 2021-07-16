@@ -20,7 +20,7 @@
                 <div class="form-check">
                     <input class="form-check-input" name="category" type="checkbox" value="@category.Id" id="flexCheckDefault @category.Id">
                     <label class="form-check-label" for="flexCheckDefault @category.Id">
-                        @Html.DisplayFor(modelItem => category.Name)
+                        @Html.DisplayFor(modelItem => category.Name) (@category.Products.Count)
                     </label>
                 </div>
             }
