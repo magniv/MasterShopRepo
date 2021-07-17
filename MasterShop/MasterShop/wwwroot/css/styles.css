@@ -1,4 +1,17 @@
-﻿/* Table styles */
+﻿.main-page {
+    background-image: url(../images/HomePage/homePage-wall-paper.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center bottom;
+}
+
+.navbar-container {
+    opacity: 0.8;
+}
+
+
+/* Table styles */
 
 .table {
     display: block;
