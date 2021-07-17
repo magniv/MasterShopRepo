@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="~/lib/fontawesome-free-5.15.3-web/css/all.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/styles.css" />
+
+    @RenderSection("Styles", required: false)
 </head>
-<body>
+<body class="main-page">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark box-shadow mb-3 navbar-container">
             <div class="container">
@@ -34,6 +36,9 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Accounts" asp-action="Login"><div class="fas fa-sign-in-alt"></div> Login</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -47,7 +52,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - MasterShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - MasterShop
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

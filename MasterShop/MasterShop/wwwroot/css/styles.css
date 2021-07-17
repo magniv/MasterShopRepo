@@ -1,4 +1,17 @@
-﻿/* Table styles */
+﻿.main-page {
+    background-image: url(../images/HomePage/homePage-wall-paper.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center bottom;
+}
+
+.navbar-container {
+    opacity: 0.8;
+}
+
+
+/* Table styles */
 
 .table {
     display: block;
@@ -14,4 +27,34 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-align: center;
+}
+
+#loader {
+    display: flex;
+}
+
+.price-filter-range {
+    margin-top: 1em !important;
+}
+
+.products-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-item {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+}
+
+.product-image {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
 }
