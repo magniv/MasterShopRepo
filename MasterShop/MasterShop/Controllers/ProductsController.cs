@@ -10,6 +10,13 @@ using MasterShop.Models;
 
 namespace MasterShop.Controllers
 {
+    public class FilterRequest
+    {
+        public List<int> Categories { get; set; }
+        public int? MinPrice { get; set; }
+        public int? MaxPrice { get; set; }
+    }
+
     public class ProductsController : Controller
     {
         private readonly MasterShopContext _context;
@@ -22,8 +29,11 @@ namespace MasterShop.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var masterShopContext = _context.Product.Include(p => p.Category);
-            return View(await masterShopContext.ToListAsync());
+            var products = _context.Product.Include(p => p.Category);
+            // TODO - Consider add login user best categories according to previous orders.
+
+            ViewData["Categories"] = await _context.Category.ToListAsync();
+            return View(await products.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -155,6 +165,38 @@ namespace MasterShop.Controllers
         private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> Filter(FilterRequest request)
+        {
+            List<Product> results;
+            var products = _context.Product;
+            if (request != null)
+            {
+                var query = products.AsQueryable();
+                if (request.Categories != null && request.Categories.Count > 0)
+                {
+                    query = query.Where(p => request.Categories.Contains(p.CategoryId));
+                }
+
+                if (request.MinPrice.HasValue)
+                {
+                    query = query.Where(p => p.Price >= request.MinPrice.Value);
+                }
+
+                if (request.MaxPrice.HasValue)
+                {
+                    query = query.Where(p => p.Price <= request.MaxPrice.Value);
+                }
+
+                results = await query.ToListAsync();
+            }
+            else
+            {
+                results = await products.ToListAsync();
+            }
+
+            return Json(results);
         }
     }
 }
