@@ -54,6 +54,11 @@ html {
     background-position: center bottom;
 }
 
+.description-home {
+    font-size: 24px;
+    word-spacing:5px;
+}
+
 .navbar-container {
     opacity: 0.8;
 }
