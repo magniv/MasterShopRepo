@@ -46,6 +46,18 @@ html {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
+.home-page {
+    background-image: url(../images/HomePage/homePage-wall-paper.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center bottom;
+}
+
+.navbar-container {
+    opacity: 0.8;
+}
+
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
