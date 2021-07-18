@@ -65,7 +65,7 @@ namespace MasterShop.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index", "Main");
+                return RedirectToAction("Index", "Home");
             }
             return View(account);
         }
@@ -98,7 +98,7 @@ namespace MasterShop.Controllers
                 if (user != null)
                 {
                     await SignIn(user);
-                    return RedirectToAction("Index", "Clothings");
+                    return RedirectToAction("Index", "Prodcuts");
                 }
                 else
                 {
@@ -170,14 +170,14 @@ namespace MasterShop.Controllers
             await _context.SaveChangesAsync();
 
             await SignIn(account);
-            return RedirectToAction("Index", "Main");
+            return RedirectToAction("Index", "Home");
    
         }
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Main");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
