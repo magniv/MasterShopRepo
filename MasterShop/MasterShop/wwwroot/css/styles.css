@@ -4,6 +4,13 @@
     background-size: cover;
     background-attachment: scroll;
     background-position: center bottom;
+    padding-top: 4em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin-bottom: unset;
 }
 
 .description-home {
@@ -13,6 +20,16 @@
 
 .navbar-container {
     opacity: 0.8;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.main-container {
+    overflow: auto;
+    height: calc(100% - 60px);
 }
 
 
@@ -52,6 +69,8 @@
     display: flex;
     flex-direction: column;
     padding: 30px 20px;
+    background-color: bisque;
+    margin: 0 16px 16px 16px;
 }
 
 .product-image {

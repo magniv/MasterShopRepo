@@ -33,7 +33,7 @@
             <input type="number" min=0 max="10000" oninput="validity.valid || (value='10000');" id="max_price" class="price-range-field" />
             <br />
             <div class="d-flex mt-lg-5">
-                <input class="btn btn-primary mr-5" id="filter_submit_btn" type="button" value="Filter" />
+                <button type="button" class="btn btn-primary mr-5" id="filter_submit_btn">Filter <i class="fas fa-filter"></i></button>
                 <a asp-action="Index">
                     <input type="submit" value="Reset Filter" class="btn btn-secondary" />
                 </a>
