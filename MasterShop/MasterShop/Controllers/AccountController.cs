@@ -98,7 +98,7 @@ namespace MasterShop.Controllers
                 if (user != null)
                 {
                     await SignIn(user);
-                    return RedirectToAction("Index", "Prodcuts");
+                    return RedirectToAction("Index", "Products");
                 }
                 else
                 {
@@ -119,6 +119,7 @@ namespace MasterShop.Controllers
                 new Claim("Email", user.Email),
                 new Claim("Password", user.Password),
                 new Claim(ClaimTypes.Role, user.Type.ToString()),
+
             };
 
             var claimsIdentity = new ClaimsIdentity(
