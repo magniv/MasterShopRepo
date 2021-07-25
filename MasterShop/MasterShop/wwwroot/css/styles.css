@@ -43,7 +43,6 @@
  /* Table styles */ 
 
 .table {
-    display: block;
     width: 100%;
     overflow-x: auto;
 }
@@ -88,4 +87,8 @@
 .product-info {
     display: flex;
     flex-direction: column;
+}
+
+.app-background {
+    background-color: bisque;
 }

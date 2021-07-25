@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MasterShop.Models.Cart>
+
+@{
+    ViewData["Title"] = "Cart";
+    var cartSumPayment = ViewData["CartSumPayment"];
+}
+
+
+<div class="container p-4 rounded app-background">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Order Summary</h2>
+            @if (Model.Count() > 0)
+            {
+                <div class="table-responsive p-md-2">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="border-0">Product</th>
+                                <th class="border-0">Quantity</th>
+                                <th class="border-0">Price</th>
+                                <th class="border-0">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Product.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Count)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Product.Price) NIS
+                                    </td>
+                                    <td>
+                                        @{ var totalPrice = item.Product.Price * item.Count; }
+                                        @totalPrice NIS
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <a class="text-success mr-1" asp-action="Increase" asp-route-id="@item.Id">
+                                                <i class="fas fa-plus"></i>
+                                            </a>
+                                            <a class="text-danger" asp-action="Decrease" asp-route-id="@item.Id">
+                                                <i class="fas fa-minus"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center mt-2">
+                    <h4>Total: @cartSumPayment NIS</h4>
+                    <a asp-controller="Orders" asp-action="Create" class="btn btn-primary mt-2">Procceed To Checkout</a>
+                </div>
+            }
+            else
+            {
+                <h3 class="mt-2">Your Cart Is Empty</h3>
+            }
+        </div>
+    </div>
+</div>
+
