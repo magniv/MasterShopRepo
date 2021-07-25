@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MasterShop.Data;
 using MasterShop.Models;
+using System.Security.Claims;
 
 namespace MasterShop.Controllers
 {
@@ -34,6 +35,40 @@ namespace MasterShop.Controllers
 
             ViewData["Categories"] = await _context.Category.ToListAsync();
             return View(await products.ToListAsync());
+        }
+
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (userEmail == null)
+            {
+                return RedirectToAction("LoginBeforeShopping", "Account");
+            }
+
+            var cart = _context.Cart.Where(c => c.Account.Email == userEmail && c.ProductId == id).FirstOrDefault();
+            if (cart == null)
+            {
+                Account account = _context.Account.First(s => s.Email == userEmail);
+                Product product = await _context.Product.FindAsync(id);
+                Cart c = new Cart()
+                {
+                    ProductId = product.Id,
+                    Product = product,
+                    Count = 1,
+                    AccountId = account.Id,
+                    Account = account
+                };
+
+                _context.Cart.Add(c);
+            }
+            else
+            {
+                cart.Count++;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Products/Details/5
