@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using MasterShop.Data;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MasterShop.Controllers
@@ -21,12 +22,12 @@ namespace MasterShop.Controllers
 
         public IActionResult Index()
         {
-            return View();            
+            return View();
         }
 
         public IActionResult AdminPage()
         {
-            var userEmail = User.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             try
             {
                 Account account = _context.Account.First(s => s.Email == userEmail);

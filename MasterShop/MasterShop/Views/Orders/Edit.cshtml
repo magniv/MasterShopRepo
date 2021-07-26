@@ -4,12 +4,6 @@
     ViewData["Title"] = "Edit";
 }
 
-@{
-    var userName = Context.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value;
-    var userType = Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
-    var isAdmin = userType != null && userType == "Admin";
-}
-
 <h1>Edit</h1>
 
 <h4>Order</h4>
@@ -54,8 +48,6 @@
 <div>
     <a asp-controller="Home" asp-action="AdminPage">Back to List</a>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
