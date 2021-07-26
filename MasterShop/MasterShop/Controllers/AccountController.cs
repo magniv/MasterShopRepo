@@ -98,7 +98,7 @@ namespace MasterShop.Controllers
                 if (user != null)
                 {
                     await SignIn(user);
-                    return RedirectToAction("Index", "Products");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

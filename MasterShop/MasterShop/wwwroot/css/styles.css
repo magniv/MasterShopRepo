@@ -11,9 +11,10 @@
     background-image: url(../images/HomePage/homePage-wall-paper.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: scroll;
+    background-attachment: fixed;
+    position: relative;
     background-position: center bottom;
-    position: absolute;
+    min-height: 100%;
     right: 0;
     top: 0;
     left: 0;
@@ -33,12 +34,6 @@
     left: 0;
     z-index: 1000;
 }
-
-.main-container {
-    overflow: auto;
-    height: calc(100% - 60px);
-}
-
 
  /* Table styles */ 
 
@@ -91,4 +86,8 @@
 
 .app-background {
     background-color: bisque;
+}
+
+.show-product {
+    cursor: pointer;
 }
