@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MasterShop.Data;
 using MasterShop.Models;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 
@@ -48,9 +49,24 @@ namespace MasterShop.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword");
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (userEmail == null)
+            {
+                return RedirectToAction("LoginBeforeShopping", "Account");
+            }
+
+            var userCart = await _context.Cart.Include(c => c.Product).Where(c => c.Account.Email == userEmail).ToListAsync();
+
+            double totalPrice = 0;
+            foreach (var cartItem in userCart)
+            {
+                totalPrice += cartItem.Product.Price * cartItem.Count;
+            }
+
+            ViewData["TotalPrice"] = totalPrice;
+            ViewData["UserCart"] = userCart;
             return View();
         }
 
@@ -61,14 +77,33 @@ namespace MasterShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,AccountId,OrderTime,Address,PhoneNumber,SumToPay")] Order order)
         {
-            if (ModelState.IsValid)
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (userEmail == null)
             {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("LoginBeforeShopping", "Account");
             }
-            ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword", order.AccountId);
-            return View(order);
+
+            Account account = _context.Account.First(s => s.Email == userEmail);
+            order.Account = account;
+            var userCart = _context.Cart.Include(c => c.Product).Where(c => c.AccountId == account.Id);
+
+            order.OrderTime = DateTime.Now;
+            order.SumToPay = 0;
+            order.ProductOrders = new List<ProductOrder>();
+
+            foreach (var item in userCart)
+            {
+                order.ProductOrders.Add(new ProductOrder() { ProductId = item.Product.Id, OrderId = order.Id, Count = item.Count });
+                order.SumToPay += item.Product.Price * item.Count;
+            }
+
+            _context.Cart.RemoveRange(_context.Cart.Where(c => c.AccountId == account.Id));
+            _context.Add(order);
+
+            await _context.SaveChangesAsync();
+            string orderNumber = order.Id.ToString();
+            ViewData["OrderNumber"] = orderNumber;
+            return View("Ordered");
         }
 
         // GET: Orders/Edit/5

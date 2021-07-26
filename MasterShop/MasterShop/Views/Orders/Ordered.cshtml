@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    List<Cart> userCart = ViewData["UserCart"] as List<Cart>;
+    var orderNumber = ViewData["OrderNumber"];
+}
+<div class="container p-4 rounded app-background text-center">
+    <h2>Order Confirmation</h2><br />
+    <h4>Thank you for order from us!</h4><br />
+    <h5>
+        Order Number: @orderNumber
+    </h5><br />
+    <a class="btn btn-primary btn-sm" asp-controller="Home" asp-action="Index" >Continue to Home Page</a><br />
+</div>

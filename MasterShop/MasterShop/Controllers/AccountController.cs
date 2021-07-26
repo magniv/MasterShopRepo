@@ -26,7 +26,7 @@ namespace MasterShop.Controllers
 
         public IActionResult Profile()
         {
-            var userEmail = User.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             Account account = _context.Account.FirstOrDefault(c => c.Email == userEmail);
           
             if (account == null)
@@ -116,7 +116,6 @@ namespace MasterShop.Controllers
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim("FullName", user.FullName),
-                new Claim("Email", user.Email),
                 new Claim("Password", user.Password),
                 new Claim(ClaimTypes.Role, user.Type.ToString()),
 
