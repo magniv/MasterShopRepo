@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MasterShop.Data;
 using MasterShop.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace MasterShop.Controllers
 {
@@ -70,6 +72,7 @@ namespace MasterShop.Controllers
         }
 
         // GET: Orders/Edit/5
+       [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,6 +94,7 @@ namespace MasterShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,AccountId,OrderTime,Address,PhoneNumber,SumToPay")] Order order)
         {
             if (id != order.Id)
@@ -123,6 +127,7 @@ namespace MasterShop.Controllers
         }
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +149,7 @@ namespace MasterShop.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var order = await _context.Order.FindAsync(id);

@@ -1,0 +1,13 @@
+﻿@{ ViewData["Title"] = "Admin Page"; }
+
+@{
+    IEnumerable<MasterShop.Models.Order> orders = ViewData["Orders"] as IEnumerable<MasterShop.Models.Order>;
+    IEnumerable<MasterShop.Models.Product> products = ViewData["Products"] as IEnumerable<MasterShop.Models.Product>;
+    IEnumerable<MasterShop.Models.Account> accounts = ViewData["Accounts"] as IEnumerable<MasterShop.Models.Account>;
+}
+
+<body>
+    <partial name="../Orders/Index" model="orders" />
+    <partial name="../Admin/AccountList" model="accounts" />
+    <partial name="../Admin/ProductList" model="products" />
+</body>
