@@ -111,14 +111,12 @@ namespace MasterShop.Controllers
 
         private async Task SignIn(Account user)
         {
-            //HttpContext.Session.SetString("Type", user.Type.ToString());
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim("FullName", user.FullName),
                 new Claim("Password", user.Password),
                 new Claim(ClaimTypes.Role, user.Type.ToString()),
-
             };
 
             var claimsIdentity = new ClaimsIdentity(
@@ -178,6 +176,11 @@ namespace MasterShop.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

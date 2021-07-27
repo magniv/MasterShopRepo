@@ -23,6 +23,7 @@ namespace MasterShop.Controllers
         }
 
         // GET: Orders
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var masterShopContext = _context.Order.Include(o => o.Account);
@@ -30,6 +31,7 @@ namespace MasterShop.Controllers
         }
 
         // GET: Orders/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -58,6 +60,11 @@ namespace MasterShop.Controllers
             }
 
             var userCart = await _context.Cart.Include(c => c.Product).Where(c => c.Account.Email == userEmail).ToListAsync();
+
+            if (userCart.Count == 0)
+            {
+                return View("../Carts/Index", userCart);
+            }
 
             double totalPrice = 0;
             foreach (var cartItem in userCart)
@@ -124,9 +131,6 @@ namespace MasterShop.Controllers
             return View(order);
         }
 
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -155,7 +159,7 @@ namespace MasterShop.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AdminPage", "Home");
             }
             ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword", order.AccountId);
             return View(order);
@@ -190,7 +194,7 @@ namespace MasterShop.Controllers
             var order = await _context.Order.FindAsync(id);
             _context.Order.Remove(order);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("AdminPage", "Home");
         }
 
         private bool OrderExists(int id)
