@@ -23,5 +23,7 @@ namespace MasterShop.Data
         public DbSet<MasterShop.Models.Order> Order { get; set; }
 
         public DbSet<MasterShop.Models.Cart> Cart { get; set; }
+
+        public DbSet<MasterShop.Models.ProductOrder> ProductOrder { get; set; }
     }
 }

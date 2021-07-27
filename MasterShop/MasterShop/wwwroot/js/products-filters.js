@@ -2,33 +2,14 @@
 
     
 	$("#filter_submit_btn").click(function () {
+		executeFilter();
+	});
 
-		// Categories Filter
-		var categories = [];
-        $("input:checkbox[name=category]:checked").each(function () {
-            categories.push($(this).val());
-		});
-
-		// Price Filter
-		var min_price = $('#min_price').val();
-		var max_price = $('#max_price').val();
-
-
-        $.ajax({
-            url: "/Products/Filter",
-            dataType: "json",
-            type: "POST",
-            data: {
-				categories: categories,
-				minPrice: min_price || 0,
-				maxPrice: max_price || Number.MAX_VALUE
-            },
-            success: function (data) {
-                $('#filter-results').tmpl(data).appendTo('#products-container');
-            },
-
-        });
-    });
+	$("#product_name_input").keypress(function (e) {
+		if (e.which == 13) {
+			executeFilter();
+        }
+	});
 
 
     // Slider
@@ -103,3 +84,35 @@
         $('#loader').hide();
     });
 });
+
+function executeFilter() {
+	// Name filter
+	var name = $('#product_name_input').val();
+
+	// Categories Filter
+	var categories = [];
+	$("input:checkbox[name=category]:checked").each(function () {
+		categories.push($(this).val());
+	});
+
+	// Price Filter
+	var min_price = $('#min_price').val();
+	var max_price = $('#max_price').val();
+
+
+	$.ajax({
+		url: "/Products/Filter",
+		dataType: "json",
+		type: "POST",
+		data: {
+			name: name,
+			categories: categories,
+			minPrice: min_price || 0,
+			maxPrice: max_price || Number.MAX_VALUE
+		},
+		success: function (data) {
+			$('#filter-results').tmpl(data).appendTo('#products-container');
+		},
+
+	});
+}

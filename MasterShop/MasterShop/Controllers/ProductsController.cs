@@ -15,6 +15,7 @@ namespace MasterShop.Controllers
 {
     public class FilterRequest
     {
+        public string Name { get; set; }
         public List<int> Categories { get; set; }
         public int? MinPrice { get; set; }
         public int? MaxPrice { get; set; }
@@ -100,9 +101,6 @@ namespace MasterShop.Controllers
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -217,6 +215,11 @@ namespace MasterShop.Controllers
             if (request != null)
             {
                 var query = products.AsQueryable();
+                if (!string.IsNullOrEmpty(request.Name))
+                {
+                    query = query.Where(p => p.Name.Contains(request.Name) || p.Description.Contains(request.Name));
+                }
+
                 if (request.Categories != null && request.Categories.Count > 0)
                 {
                     query = query.Where(p => request.Categories.Contains(p.CategoryId));
