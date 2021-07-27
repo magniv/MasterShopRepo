@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Graphs";
+}
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h3 class="mb-2">Orders Count By Addresses</h3>
+            <div class="text-center" id="addressLoader">
+                <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div id="addressChart" class="chart-size"></div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="mb-2">Average Order Payement Per Month</h3>
+            <div class="text-center" id="paymentLoader">
+                <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div id="paymentChart" class="chart-size"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <h3 class="mb-2 text-center">Top Sold Products</h3>
+            <div class="text-center" id="productsLoader">
+                <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div id="productsChart"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/graphs.js"></script>
+    <script onload="initGraphs()" src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+}
