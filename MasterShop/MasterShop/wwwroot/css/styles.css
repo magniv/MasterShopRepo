@@ -11,10 +11,9 @@
     background-image: url(../images/HomePage/homePage-wall-paper.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: fixed;
-    position: relative;
+    background-attachment: scroll;
+    position: absolute;
     background-position: center bottom;
-    min-height: 100%;
     right: 0;
     top: 0;
     left: 0;
@@ -34,6 +33,13 @@
     left: 0;
     z-index: 1000;
 }
+
+.main-container {
+    overflow: auto;
+    height: calc(100% - 60px);
+}
+
+
 
  /* Table styles */ 
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MasterShop.Data;
 using MasterShop.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MasterShop.Controllers
 {
@@ -62,6 +63,12 @@ namespace MasterShop.Controllers
 
         public async Task<IActionResult> Increase(int id)
         {
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (userEmail == null)
+            {
+                return RedirectToAction("LoginBeforeShopping", "Account");
+            }
+
             var cart = _context.Cart.Where(s => s.Id == id).FirstOrDefault();
             if (cart != null)
             {
@@ -74,6 +81,12 @@ namespace MasterShop.Controllers
 
         public async Task<IActionResult> Decrease(int id)
         {
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (userEmail == null)
+            {
+                return RedirectToAction("LoginBeforeShopping", "Account");
+            }
+
             var cart = _context.Cart.Where(s => s.Id == id).FirstOrDefault();
             if (cart != null)
             {
@@ -96,6 +109,12 @@ namespace MasterShop.Controllers
         // GET: Carts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (userEmail == null)
+            {
+                return RedirectToAction("LoginBeforeShopping", "Account");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -114,18 +133,15 @@ namespace MasterShop.Controllers
         }
 
         // GET: Carts/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword");
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name");
             return View();
         }
 
-        // POST: Carts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,ProductId,Count,AccountId")] Cart cart)
         {
             if (ModelState.IsValid)
@@ -134,12 +150,12 @@ namespace MasterShop.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword", cart.AccountId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", cart.ProductId);
+
             return View(cart);
         }
 
         // GET: Carts/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -152,8 +168,6 @@ namespace MasterShop.Controllers
             {
                 return NotFound();
             }
-            ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword", cart.AccountId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", cart.ProductId);
             return View(cart);
         }
 
@@ -162,6 +176,7 @@ namespace MasterShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,Count,AccountId")] Cart cart)
         {
             if (id != cart.Id)
@@ -195,6 +210,7 @@ namespace MasterShop.Controllers
         }
 
         // GET: Carts/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -217,6 +233,7 @@ namespace MasterShop.Controllers
         // POST: Carts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var cart = await _context.Cart.FindAsync(id);

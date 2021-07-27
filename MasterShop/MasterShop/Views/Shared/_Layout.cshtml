@@ -29,17 +29,14 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav me-auto flex-grow-1">
-                        @if (isAdmin)
-                        {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AdminPage"><i class="fas fa-users-cog mr-1"></i>Admin Panel</a>
-                        </li>
-                        }
-                        else
-                        {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index"><div class="fas fa-shopping-cart"></div> Shop</a>
                         </li>
+                        @if (isAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AdminPage"><i class="fas fa-users-cog mr-1"></i>Admin Panel</a>
+                            </li>
                         }
                     </ul>
                     <ul class="d-flex navbar-nav">
@@ -93,7 +90,7 @@
             </div>
         </div>
     </header>
-    <div class="container">
+    <div class="container main-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

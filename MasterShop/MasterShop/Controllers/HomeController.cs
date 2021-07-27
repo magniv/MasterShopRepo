@@ -8,6 +8,8 @@ using System.Linq;
 using MasterShop.Data;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MasterShop.Controllers
 {
@@ -25,6 +27,7 @@ namespace MasterShop.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult AdminPage()
         {
             var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -34,8 +37,9 @@ namespace MasterShop.Controllers
                 if (account.Type == userType.Admin)
                 {
                     ViewData["Orders"] = _context.Order.ToList();
-                    ViewData["Products"] = _context.Product.ToList();
+                    ViewData["Products"] = _context.Product.Include(p => p.Category).ToList();
                     ViewData["Accounts"] = _context.Account.ToList();
+                    ViewData["Categories"] = _context.Category.ToList();
                     return View("../Admin/index");
                 }
                 else
@@ -45,11 +49,6 @@ namespace MasterShop.Controllers
             {
                 return View();
             }
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
