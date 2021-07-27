@@ -41,6 +41,7 @@ namespace MasterShop.Controllers
 
             var order = await _context.Order
                 .Include(o => o.Account)
+                .Include(o => o.ProductOrders).ThenInclude(p => p.Product)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -77,9 +78,6 @@ namespace MasterShop.Controllers
             return View();
         }
 
-        // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,AccountId,OrderTime,Address,PhoneNumber,SumToPay")] Order order)
