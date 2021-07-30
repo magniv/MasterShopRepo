@@ -4,14 +4,16 @@ using MasterShop.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MasterShop.Migrations
 {
     [DbContext(typeof(MasterShopContext))]
-    partial class MasterShopContextModelSnapshot : ModelSnapshot
+    [Migration("20210730143202_InitImageFile")]
+    partial class InitImageFile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,6 +146,10 @@ namespace MasterShop.Migrations
 
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

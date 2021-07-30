@@ -9,7 +9,8 @@ using MasterShop.Data;
 using MasterShop.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-
+using System.IO;
+using System.Net;
 
 namespace MasterShop.Controllers
 {
@@ -24,6 +25,7 @@ namespace MasterShop.Controllers
     public class ProductsController : Controller
     {
         private readonly MasterShopContext _context;
+        private readonly string[] _fileExtensions = new string[] { ".jpg", ".png", ".jpeg" };
 
         public ProductsController(MasterShopContext context)
         {
@@ -104,14 +106,36 @@ namespace MasterShop.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,CategoryId,ImageUrl")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,CategoryId,ImageFile")] Product product)
         {
+            if (product.ImageFile == null)
+            {
+                ModelState.AddModelError(nameof(Product.ImageFile), "Image is Required");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            else
+            {
+                string extension = Path.GetExtension(product.ImageFile.FileName);
+                if (!_fileExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError(nameof(Product.ImageFile), "This file type is not suppoted. File type must be an image type");
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
+            }
+
             if (ModelState.IsValid)
             {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    product.ImageFile.CopyTo(ms);
+                    product.Image = ms.ToArray();
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("AdminPage", "Home");
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Category, nameof(Category.Id), nameof(Category.Name), product.CategoryId);
             return View(product);
         }
@@ -140,7 +164,7 @@ namespace MasterShop.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,CategoryId,ImageUrl")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,CategoryId,Image")] Product product)
         {
             if (id != product.Id)
             {

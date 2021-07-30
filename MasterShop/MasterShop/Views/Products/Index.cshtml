@@ -52,7 +52,11 @@
             {
                 <div class="col product-item">
                     <div class="product-image align-items-center">
-                        <img src="/@Html.DisplayFor(modelItem => item.ImageUrl)" alt="" height="160" width="240">
+                        @{
+                            var base64 = Convert.ToBase64String(item.Image);
+                            var imgSrc = String.Format("data:image/jpeg;base64,{0}", base64);
+                        }
+                        <img src="@imgSrc" alt="" height="160" width="240">
                     </div>
                     <div class="product-info align-items-center">
                         <h5 class="text-center">
@@ -80,7 +84,7 @@
     <script id="filter-results" type="text/html">
         <div class="col product-item">
             <div class="product-image align-items-center">
-                <img src="/${imageUrl}" alt="" height="160" width="240">
+                <img src="data:image/jpeg;base64,${image}" alt="" height="160" width="240">
             </div>
             <div class="product-info align-items-center">
                 <h5 class="text-center">

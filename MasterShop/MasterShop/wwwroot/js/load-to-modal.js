@@ -3,7 +3,7 @@
         var itemName = $(this).data("name");
         var itemImage = $(this).data("image");
         $('#productName').html(itemName);
-        $("#productImage").attr("src", '/' + itemImage);
+        $("#productImage").attr("src", itemImage);
         $("#ModalToggle").modal();
     });
 });
