@@ -4,50 +4,56 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Order</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Account)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Account.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.OrderTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.OrderTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class="col-sm-10" id="address" data-address="@Html.DisplayFor(model => model.Address)">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SumToPay)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SumToPay) NIS
-        </dd>
-    </dl>
-
-    <div id="map_element" style="height: 300px"></div>
+<div class="row justify-content-center m-3">
+    <div class="col-md-6 p-4 rounded app-background">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <h4 class="text-center">Order - Details</h4>
+                <hr />
+            </div>
+        </div>
+        <dl class="row justify-content-center">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Account):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Account.FullName)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.OrderTime):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.OrderTime)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Address):
+            </dt>
+            <dd class="col-sm-8" id="address" data-address="@Html.DisplayFor(model => model.Address)">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.PhoneNumber):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.SumToPay):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.SumToPay) NIS
+            </dd>
+        </dl>
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-controller="Home" asp-action="AdminPage">Back to List</a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-controller="Home" asp-action="AdminPage">Back to List</a>
-</div>
+<br />
+<div id="map_element" style="height: 300px"></div>
 
 @section Scripts {
     <script src="~/js/order-map.js"></script>
