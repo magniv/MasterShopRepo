@@ -21,13 +21,16 @@ namespace MasterShop.Models
 
         [Display(Name = "Product Description")]
         [StringLength(200)]
+        [Required(ErrorMessage = "You must input product description")]
         public string Description { get; set; }
 
         [Display(Name = "Category")]
+        [Required(ErrorMessage = "You must select category")]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
         [Display(Name = "Image Url")]
+        [Required(ErrorMessage = "You must input image url")]
         public string ImageUrl { get; set; }
 
         public ICollection<ProductOrder> ProductOrders { get; set; }

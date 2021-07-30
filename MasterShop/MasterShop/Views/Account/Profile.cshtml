@@ -1,68 +1,58 @@
 ﻿@model MasterShop.Models.Account
-<body id="page-top">
-    <section>
 
-        <div class="class=" container"">
-            <div style="text-align:center">
+@{
+    ViewData["Title"] = "Porfile";
+}
 
-                <table style="width:55%" align="center">
-
-                    <tr>
-                        <td>
-                            <h4>My Account</h4>
-                            <hr />
-                            <br />
-                        </td>
-
-                        <td></td>
-                    </tr>
-
-                    <tr class="table-active">
-
-                        <th>User Name</th>
-                        <th><label asp-for="Email" class="control-label"></label></th>
-                        <th><label asp-for="Password" class="control-label"></label></th>
-                    </tr>
-
-                    <form asp-action="Profile">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id" />
-                        <input type="hidden" asp-for="FullName" />
-                        <input type="hidden" asp-for="Type" />
-                        <tr>
-                            @{ var userId = Context.User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value; }
-
-                            <td>@userId</td>
-                            <td>
-                                <div class="form-group">
-                                    <br />
-                                    <input asp-for="Email" class="col-xs-2" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <br />
-                                    <input asp-for="Password" class="col-xs-2" />
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <br />
-                                <br />
-                                <br />
-                                <div class="form-group">
-                                    <input type="submit" value="Save" class="btn btn-warning" />
-                                </div>
-                            </td>
-                            <td></td>
-                        </tr>
-                    </form>
-                </table>
+<div class="row justify-content-center m-3">
+    <div class="col-md-8 p-4 rounded app-background">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <h4 class="text-center">My Account</h4>
+                <hr />
             </div>
         </div>
-    </section>
-</body>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <form asp-action="Profile">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Type" />
+                    <input type="hidden" asp-for="Gender" />
+                    <input type="hidden" asp-for="FullName" />
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="FullName" class="control-label"></label>
+                            <div>@Model.FullName</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

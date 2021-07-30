@@ -112,7 +112,7 @@ namespace MasterShop.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("AdminPage", "Home");
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, nameof(Category.Id), nameof(Category.Name), product.CategoryId);
             return View(product);
         }
 
@@ -130,7 +130,7 @@ namespace MasterShop.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", nameof(Category.Name), product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, nameof(Category.Id), nameof(Category.Name), product.CategoryId);
             return View(product);
         }
 
@@ -167,7 +167,7 @@ namespace MasterShop.Controllers
                 }
                 return RedirectToAction("AdminPage", "Home");
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", nameof(Category.Name), product.CategoryId);
             return View(product);
         }
 

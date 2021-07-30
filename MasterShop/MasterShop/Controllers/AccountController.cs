@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore.Internal;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace MasterShop.Controllers
 {
@@ -46,12 +49,25 @@ namespace MasterShop.Controllers
                 return NotFound();
             }
 
+            if (!ValidatePassword(account.Password))
+            {
+                ModelState.AddModelError(nameof(Account.Password), "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+            if (account.Password != account.ConfirmPassword)
+            {
+                ModelState.AddModelError(nameof(Account.ConfirmPassword), "Passwords does not match");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(account);
                     await _context.SaveChangesAsync();
+                    await SignIn(account);
                 }
                 
                 catch (DbUpdateConcurrencyException)
@@ -67,6 +83,7 @@ namespace MasterShop.Controllers
                 }
                 return RedirectToAction("Index", "Home");
             }
+
             return View(account);
         }
 
@@ -102,7 +119,7 @@ namespace MasterShop.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("Password", "The user name or password provided is incorrect.");
+                    ModelState.AddModelError(nameof(Account.Password), "The user name or password provided is incorrect.");
                 }
             }             
 
@@ -139,30 +156,33 @@ namespace MasterShop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string email, string password, string fname, string lname, string ConfirmPassword, string gender)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([Bind("Id,Email,Password,ConfirmPassword,FullName,Gender")] Account account)
         {
-            if (_context.Account.FirstOrDefault(x => x.Email == email) != null)
+            if (_context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
             {
-                ModelState.AddModelError("email", "Email address already exists. Please enter a different email address.");
-                ViewData["Message"] = "User with this Email Already Exist";
+                ModelState.AddModelError(nameof(Account.Email), "Email address already exists. Please enter a different email address.");
                 return View();
             }
-            Account account = new Account()
-            {
-                Email = email,
-                Password = password,
-                ConfirmPassword = ConfirmPassword,
-                FullName = fname + " " + lname,
-                Type = userType.Customer,
-                Gender = gender
-            };
 
-            var account_check = await _context.Account
-        .FirstOrDefaultAsync(m => m.Email == account.Email);
-            if (account_check != null)
+            if (!ValidatePassword(account.Password))
             {
-                return NotFound();
+                ModelState.AddModelError(nameof(Account.Password), "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
+
+            if (account.Password != account.ConfirmPassword)
+            {
+                ModelState.AddModelError(nameof(Account.ConfirmPassword), "Passwords does not match");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(account);
+            }
+
+            account.Type = userType.Customer;
 
             _context.Add(account);
             await _context.SaveChangesAsync();
@@ -170,6 +190,13 @@ namespace MasterShop.Controllers
             await SignIn(account);
             return RedirectToAction("Index", "Home");
    
+        }
+
+        private bool ValidatePassword(string password)
+        {
+            Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+            return regex.IsMatch(password);
+
         }
 
         public async Task<IActionResult> Logout()
@@ -181,6 +208,153 @@ namespace MasterShop.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Account.FirstOrDefaultAsync(m => m.Id == id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            return View(account);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([Bind("Id,Email,Password,ConfirmPassword,FullName,Gender,Type")] Account account)
+        {
+            if (_context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
+            {
+                ModelState.AddModelError("email", "Email address already exists. Please enter a different email address.");
+                ViewData["Message"] = "User with this Email Already Exist";
+                return View();
+            }
+
+            if (!ValidatePassword(account.Password))
+            {
+                ModelState.AddModelError(nameof(Account.Password), "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+            if (account.Password != account.ConfirmPassword)
+            {
+                ModelState.AddModelError(nameof(Account.ConfirmPassword), "Passwords does not match");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(account);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AdminPage", "Home");
+            }
+            return View(account);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Account.FindAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return View(account);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Username,Password,ConfirmPassword,FullName,Gender,Type")] Account account)
+        {
+            if (id != account.Id)
+            {
+                return NotFound();
+            }
+
+            if(!ValidatePassword(account.Password))
+            {
+                ModelState.AddModelError(nameof(Account.Password), "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+            if (account.Password != account.ConfirmPassword)
+            {
+                ModelState.AddModelError(nameof(Account.ConfirmPassword), "Passwords does not match");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(account);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    if (!AccountExists(account.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("AdminPage", "Home");
+            }
+
+            return View(account);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Account.FirstOrDefaultAsync(m => m.Id == id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            return View(account);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var account = await _context.Account.FindAsync(id);
+            _context.Account.Remove(account);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("AdminPage", "Home");
         }
     }
 }

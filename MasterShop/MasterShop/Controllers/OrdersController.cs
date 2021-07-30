@@ -9,7 +9,8 @@ using MasterShop.Data;
 using MasterShop.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Text.RegularExpressions;
+using System.Net;
 
 namespace MasterShop.Controllers
 {
@@ -88,6 +89,17 @@ namespace MasterShop.Controllers
                 return RedirectToAction("LoginBeforeShopping", "Account");
             }
 
+            if (!ValidatePhoneNumber(order.PhoneNumber))
+            {
+                ModelState.AddModelError(nameof(Order.PhoneNumber), "The phone number format is not ok");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(order);
+            }
+
             Account account = _context.Account.First(s => s.Email == userEmail);
             order.Account = account;
             var userCart = _context.Cart.Include(c => c.Product).Where(c => c.AccountId == account.Id);
@@ -111,6 +123,12 @@ namespace MasterShop.Controllers
             return View("Ordered");
         }
 
+        private bool ValidatePhoneNumber(string phoneNumber)
+        {
+            var regex = new Regex(@"^0(5[^7]|[2-4]|[8-9]|7[0-9])[0-9]{7}");
+            return regex.IsMatch(phoneNumber);
+        }
+
         // GET: Orders/Edit/5
        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
@@ -125,7 +143,7 @@ namespace MasterShop.Controllers
             {
                 return NotFound();
             }
-            ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword", order.AccountId);
+            ViewData["AccountId"] = new SelectList(_context.Account, nameof(Account.Id), nameof(Account.FullName), order.AccountId);
             return View(order);
         }
 
@@ -137,6 +155,12 @@ namespace MasterShop.Controllers
             if (id != order.Id)
             {
                 return NotFound();
+            }
+
+            if (!ValidatePhoneNumber(order.PhoneNumber))
+            {
+                ModelState.AddModelError(nameof(Order.PhoneNumber), "The phone number format is not ok");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
 
             if (ModelState.IsValid)
@@ -159,7 +183,7 @@ namespace MasterShop.Controllers
                 }
                 return RedirectToAction("AdminPage", "Home");
             }
-            ViewData["AccountId"] = new SelectList(_context.Account, "Id", "ConfirmPassword", order.AccountId);
+            ViewData["AccountId"] = new SelectList(_context.Account, nameof(Account.Id), nameof(Account.FullName), order.AccountId);
             return View(order);
         }
 

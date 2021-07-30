@@ -18,9 +18,11 @@ namespace MasterShop.Models
         public DateTime OrderTime { get; set; }
 
         [Display(Name = "Address")]
+        [Required(ErrorMessage = "You must add an address")]
         public string Address { get; set; }
 
         [Display(Name = "Phone Number")]
+        [Required(ErrorMessage = "You must add a phone number")]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Sum To Pay")]
