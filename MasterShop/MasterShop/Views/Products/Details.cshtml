@@ -6,52 +6,57 @@
     var isAdmin = userType != null && userType == "Admin";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class="col-sm-10">
+<div class="row justify-content-center m-3">
+    <div class="col-md-8 p-4 rounded app-background">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <h4 class="text-center">Product - Details</h4>
+                <hr />
+            </div>
+        </div>
+        <dl class="row justify-content-center">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Name):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Price):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Description):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Category):
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Category.Name)
+            </dd>
+        </dl>
+        <br />
+        <div class="text-center">
             <img src="/@Html.DisplayFor(model => model.ImageUrl)" alt="" height="160" width="240">
-        </dd>
-    </dl>
-</div>
-<div>
-    @if (isAdmin)
-    {
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit | </a> 
-        <a asp-controller="Home" asp-action="AdminPage">Back to List</a>
-    }
-    else
-    {
-        <a asp-action="Index">Back to List</a>
-    }
+        </div>
+        <br />
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                @if (isAdmin)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit | </a>
+                    <a asp-controller="Home" asp-action="AdminPage">Back to List</a>
+                }
+                else
+                {
+                    <a asp-action="Index">Back to List</a>
+                }
+            </div>
+        </div>
+    </div>
 </div>
