@@ -17,6 +17,7 @@
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Image" />
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
                         <input asp-for="Name" class="form-control" />
@@ -39,11 +40,15 @@
                             <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ImageUrl" class="control-label"></label>
-                        <input asp-for="ImageUrl" class="form-control" />
-                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    <br />
+                    <div class="text-center">
+                        @{
+                            var base64 = Convert.ToBase64String(Model.Image);
+                            var imgSrc = String.Format("data:image/jpeg;base64,{0}", base64);
+                        }
+                        <img src="@imgSrc" alt="" height="160" width="240">
                     </div>
+                    <br />
                     <div class="form-group text-center">
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,9 +31,12 @@ namespace MasterShop.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        [Display(Name = "Image Url")]
-        [Required(ErrorMessage = "You must input image url")]
-        public string ImageUrl { get; set; }
+        [Required]
+        public byte[] Image { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Image")]
+        public IFormFile ImageFile { get; set; }
 
         public ICollection<ProductOrder> ProductOrders { get; set; }
 
