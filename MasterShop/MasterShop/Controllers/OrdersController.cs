@@ -14,6 +14,12 @@ using System.Net;
 
 namespace MasterShop.Controllers
 {
+    public class SearchRequest
+    {
+        public string AccountName { get; set; }
+        public double? Price { get; set; }
+        public DateTime? Date { get; set; }
+    }
     public class OrdersController : Controller
     {
         private readonly MasterShopContext _context;
@@ -217,6 +223,39 @@ namespace MasterShop.Controllers
             _context.Order.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction("AdminPage", "Home");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Filter(SearchRequest request)
+        {
+            List<Order> results;
+            var orders = _context.Order.Include(o => o.Account);
+            if (request != null)
+            {
+                var query = orders.AsQueryable();
+                if (!string.IsNullOrEmpty(request.AccountName))
+                {
+                    query = query.Where(p => p.Account.FullName.Contains(request.AccountName));
+                }
+
+                if (request.Date != null)
+                {
+                    query = query.Where(p => request.Date <= p.OrderTime);
+                }
+
+                if (request.Price.HasValue)
+                {
+                    query = query.Where(p => p.SumToPay >= request.Price.Value);
+                }
+
+                results = await query.ToListAsync();
+            }
+            else
+            {
+                results = await orders.ToListAsync();
+            }
+
+            return Json(results);
         }
 
         private bool OrderExists(int id)
