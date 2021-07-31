@@ -33,13 +33,3 @@ function executeSearch() {
 
 	});
 }
-
-
-function convertTime(isoTime) {
-	const pad = isoTime => ("0" + isoTime).slice(-2)
-	const d = new Date(2019, 9, 28, 3, 1, 1)
-	const iso = d.toISOString()
-	let [date, time] = iso.split("T")
-	const [_, hh, mm, ss, ampm] = new Date(iso).toLocaleTimeString('en-US').match(/(\d{1,2}):(\d{2}):(\d{2}) (\w{2})/)
-	return date + " " + pad(hh) + ":" + pad(mm) + " " + ampm
-}
