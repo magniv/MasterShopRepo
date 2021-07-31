@@ -229,7 +229,7 @@ namespace MasterShop.Controllers
         public async Task<IActionResult> Filter(SearchRequest request)
         {
             List<Order> results;
-            var orders = _context.Order;
+            var orders = _context.Order.Include(o => o.Account);
             if (request != null)
             {
                 var query = orders.AsQueryable();
