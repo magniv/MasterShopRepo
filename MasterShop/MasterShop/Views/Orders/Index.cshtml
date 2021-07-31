@@ -7,6 +7,21 @@
 <div class="rounded shadow-md p-5 app-background mb-5">
     <div class="container">
         <h2>Orders Placed</h2>
+        <div class="d-flex col-md-7 mb-2">
+            <input class="form-control mr-2" id="order_search" placeholder="Enter account name" />
+            <div style="cursor: pointer" onclick="toggle_visibility()">Advanced search <i class="fas fa-caret-down"></i></div>
+            <div style="display: none" class="container_advanced">
+                <h5>User Account:</h5>
+                <input class="form-control" id="account_name_input" />
+                <br />
+                <h5>From Price:</h5>
+                <input class="form-control" id="price_input" />
+                <br />
+                <h5>Created after:</h5>
+                <input type="date" class="form-control" id="date_input" />
+                <button type="button" class="btn btn-primary mr-5 mt-1" id="order_filter_btn">Search <i class="fas fa-search"></i></button>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="table-responsive">
@@ -31,11 +46,11 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="table-container">
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>
+                                    <td id="search-column">
                                         @Html.DisplayFor(modelItem => item.Account.FullName)
                                     </td>
                                     <td>
@@ -64,3 +79,41 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="~/lib/jquery-ui/js/jquery-ui.js"></script>
+<script type="text/javascript" src="~/js/search.js" defer></script>
+<script type="text/javascript" src="~/js/orders-filter.js" defer></script>
+
+<script type="text/javascript">
+    function toggle_visibility() {
+        var element = $(".container_advanced");
+        if (element.css('display') == 'block')
+            element.css('display', 'none');
+        else
+            element.css('display', 'block');
+    }
+</script>
+<script id="search-results" type="text/html">
+    <tr>
+        <td id="search-column">
+            ${FullName}
+        </td>
+        <td>
+            ${OrderTime}
+        </td>
+        <td>
+            ${Address}
+        </td>
+        <td>
+            ${PhoneNumber}
+        </td>
+        <td>
+            ${SumToPay}
+        </td>
+        <td>
+            <a asp-controller="Orders" asp-action="Edit" asp-route-id="${Id}">Edit</a> |
+            <a asp-controller="Orders" asp-action="Details" asp-route-id="${Id}">Details</a> |
+            <a asp-controller="Orders" asp-action="Delete" asp-route-id="${Id}">Delete</a>
+        </td>
+    </tr>
+</script>
