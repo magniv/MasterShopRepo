@@ -7,17 +7,19 @@
 <div class="rounded shadow-md p-5 app-background mb-5">
     <div class="container">
         <h2>Orders Placed</h2>
-        <div class="d-flex col-md-7 mb-2">
-            <input class="form-control mr-2" id="order_search" placeholder="Enter account name" />
+        <div class="col-md-5 pl-0 mb-2">
+            <input class="form-control" id="order_search" placeholder="Enter account name" />
+        </div>
+        <div class="d-flex flex-column col-md-5 mb-2 pl-0">
             <div style="cursor: pointer" onclick="toggle_visibility()">Advanced search <i class="fas fa-caret-down"></i></div>
-            <div style="display: none" class="container_advanced pl-1">
-                <h6>User Account:</h6>
-                <input class="form-control" id="account_name_input" />
+            <div style="display: none" class="container_advanced pl-1 mt-1">
+                <h6>Address:</h6>
+                <input class="form-control" id="address_input" />
                 <h6>From Price:</h6>
                 <input type="number" class="form-control" id="price_input" />
                 <h6>Created after:</h6>
                 <input type="date" class="form-control" id="date_input" />
-                <button type="button" class="btn btn-primary mr-5 mt-1" id="order_filter_btn">Search <i class="fas fa-search"></i></button>
+                <button type="button" class="btn btn-primary mr-5 mt-2" id="order_filter_btn">Search <i class="fas fa-search"></i></button>
             </div>
         </div>
         <div class="row">
@@ -72,6 +74,11 @@
                             }
                         </tbody>
                     </table>
+                    <div class="col-md-12 justify-content-center" id="loader">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

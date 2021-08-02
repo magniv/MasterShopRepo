@@ -1,17 +1,20 @@
 ﻿$(document).ready(function () {
-
-    
 	$("#order_filter_btn").click(function () {
 		executeSearch();
 	});
 });
 
+$('#loader').hide();
 $(document).ajaxStart(function () {
 	$('#table-container').empty();
+	$('#loader').show();
+}).ajaxStop(function () {
+	$('#loader').hide();
 });
 
+
 function executeSearch() {
-	var name = $('#account_name_input').val();
+	var address = $('#address_input').val();
 	var price = $('#price_input').val();
 	var date = $('#date_input').val();
 
@@ -19,7 +22,7 @@ function executeSearch() {
 		url: "/Orders/Filter",
 		type: "POST",
 		data: {
-			accountName: name,
+			address: address,
 			price: price,
 			date: date
 		},

@@ -16,7 +16,7 @@ namespace MasterShop.Controllers
 {
     public class SearchRequest
     {
-        public string AccountName { get; set; }
+        public string Address { get; set; }
         public double? Price { get; set; }
         public DateTime? Date { get; set; }
     }
@@ -233,14 +233,14 @@ namespace MasterShop.Controllers
             if (request != null)
             {
                 var query = orders.AsQueryable();
-                if (!string.IsNullOrEmpty(request.AccountName))
+                if (!string.IsNullOrEmpty(request.Address))
                 {
-                    query = query.Where(p => p.Account.FullName.Contains(request.AccountName));
+                    query = query.Where(p => p.Address.Contains(request.Address));
                 }
 
                 if (request.Date != null)
                 {
-                    query = query.Where(p => request.Date <= p.OrderTime);
+                    query = query.Where(p => p.OrderTime >= request.Date);
                 }
 
                 if (request.Price.HasValue)
